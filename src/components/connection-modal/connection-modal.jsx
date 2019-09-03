@@ -27,7 +27,8 @@ const ConnectionModalComponent = props => (
         className={styles.modalContent}
         contentLabel={props.name}
         headerClassName={styles.header}
-        headerImage={props.smallDeviceImage}
+        headerImage={props.connectionSmallIconURL}
+        id="connectionModal"
         onHelp={props.onHelp}
         onRequestClose={props.onCancel}
     >
@@ -43,15 +44,19 @@ const ConnectionModalComponent = props => (
 );
 
 ConnectionModalComponent.propTypes = {
-    connectingMessage: PropTypes.node,
-    deviceButtonImage: PropTypes.string,
+    connectingMessage: PropTypes.node.isRequired,
+    connectionSmallIconURL: PropTypes.string,
+    connectionTipIconURL: PropTypes.string,
     name: PropTypes.node,
     onCancel: PropTypes.func.isRequired,
     onHelp: PropTypes.func.isRequired,
     phase: PropTypes.oneOf(Object.keys(PHASES)).isRequired,
-    smallDeviceImage: PropTypes.string,
     title: PropTypes.string.isRequired,
     useAutoScan: PropTypes.bool.isRequired
+};
+
+ConnectionModalComponent.defaultProps = {
+    connectingMessage: 'Connecting'
 };
 
 export {

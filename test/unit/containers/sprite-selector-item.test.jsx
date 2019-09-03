@@ -4,7 +4,7 @@ import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
 
 import SpriteSelectorItem from '../../../src/containers/sprite-selector-item';
-import CloseButton from '../../../src/components/close-button/close-button';
+import DeleteButton from '../../../src/components/delete-button/delete-button';
 
 describe('SpriteSelectorItem Container', () => {
     const mockStore = configureStore();
@@ -48,22 +48,11 @@ describe('SpriteSelectorItem Container', () => {
         onDeleteButtonClick = jest.fn();
         dispatchSetHoveredSprite = jest.fn();
         selected = true;
-        // Mock window.confirm() which is called when the close button is clicked.
-        global.confirm = jest.fn(() => true);
     });
 
-    test('should confirm if the user really wants to delete the sprite', () => {
+    test('should delete the sprite', () => {
         const wrapper = mountWithIntl(getContainer());
-        wrapper.find(CloseButton).simulate('click');
-        expect(global.confirm).toHaveBeenCalled();
+        wrapper.find(DeleteButton).simulate('click');
         expect(onDeleteButtonClick).toHaveBeenCalledWith(1337);
-    });
-
-    test('should not delete the sprite if the user cancels', () => {
-        global.confirm = jest.fn(() => false);
-        const wrapper = mountWithIntl(getContainer());
-        wrapper.find(CloseButton).simulate('click');
-        expect(global.confirm).toHaveBeenCalled();
-        expect(onDeleteButtonClick).not.toHaveBeenCalled();
     });
 });

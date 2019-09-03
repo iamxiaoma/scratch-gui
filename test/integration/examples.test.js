@@ -26,10 +26,9 @@ describe('player example', () => {
         await driver.quit();
     });
 
-    test('Load a project by ID', async () => {
+    test.skip('Player: load a project by ID', async () => {
         const projectId = '96708228';
         await loadUri(`${uri}#${projectId}`);
-        await new Promise(resolve => setTimeout(resolve, 2000));
         await clickXpath('//img[@title="Go"]');
         await new Promise(resolve => setTimeout(resolve, 2000));
         await clickXpath('//img[@title="Stop"]');
@@ -40,9 +39,9 @@ describe('player example', () => {
             .then(pLogs => pLogs.map(log => JSON.parse(log.message).message)
                 .filter(m => m.method === 'Network.requestWillBeSent')
                 .map(m => m.params.request.url)
-                .filter(url => url === 'https://projects.scratch.mit.edu/internalapi/project/96708228/get/')
+                .filter(url => url === 'https://projects.scratch.mit.edu/96708228')
             );
-        await expect(projectRequests).toEqual(['https://projects.scratch.mit.edu/internalapi/project/96708228/get/']);
+        await expect(projectRequests).toEqual(['https://projects.scratch.mit.edu/96708228']);
     });
 });
 
@@ -57,7 +56,7 @@ describe('blocks example', () => {
         await driver.quit();
     });
 
-    test('Load a project by ID', async () => {
+    test.skip('Blocks: load a project by ID', async () => {
         const projectId = '96708228';
         await loadUri(`${uri}#${projectId}`);
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -71,12 +70,13 @@ describe('blocks example', () => {
             .then(pLogs => pLogs.map(log => JSON.parse(log.message).message)
                 .filter(m => m.method === 'Network.requestWillBeSent')
                 .map(m => m.params.request.url)
-                .filter(url => url === 'https://projects.scratch.mit.edu/internalapi/project/96708228/get/')
+                .filter(url => url === 'https://projects.scratch.mit.edu/96708228')
             );
-        await expect(projectRequests).toEqual(['https://projects.scratch.mit.edu/internalapi/project/96708228/get/']);
+        await expect(projectRequests).toEqual(['https://projects.scratch.mit.edu/96708228']);
     });
 
-    test('Change categories', async () => {
+    // skipping per https://github.com/LLK/scratch-gui/issues/4902 until we have better approach
+    test.skip('Change categories', async () => {
         await loadUri(`${uri}`);
         await clickText('Looks');
         await clickText('Sound');
@@ -87,11 +87,11 @@ describe('blocks example', () => {
         await clickText('Variables');
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for scroll animation
         await clickText('Make a Variable');
-        let el = await findByXpath("//input[@placeholder='']");
+        let el = await findByXpath("//input[@name='New variable name:']");
         await el.sendKeys('score');
         await clickButton('OK');
         await clickText('Make a Variable');
-        el = await findByXpath("//input[@placeholder='']");
+        el = await findByXpath("//input[@name='New variable name:']");
         await el.sendKeys('second variable');
         await clickButton('OK');
         const logs = await getLogs();
